@@ -44,6 +44,8 @@ class Server:
         for idx, param in enumerate(self.model.parameters()):
             param.grad = param.grad + user_grad[idx].clone() * ratio
 
+
+    # WY ---------------from here you need-----------------------------
     def send_parameters(self):
         assert (self.users is not None and len(self.users) > 0)
         for user in self.users:
@@ -64,6 +66,7 @@ class Server:
             total_train += user.train_samples
         for user in self.selected_users:
             self.add_parameters(user, user.train_samples / total_train)
+    # WY -----------------------------------------------------------------------
 
     def save_model(self):
         model_path = os.path.join("models", self.dataset)
