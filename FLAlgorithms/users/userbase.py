@@ -36,17 +36,23 @@ class User:
         self.persionalized_model_bar = copy.deepcopy(list(self.model.parameters()))
     
     def set_parameters(self, model):
+        """this one used for receive global model from server
+        """
         for old_param, new_param, local_param in zip(self.model.parameters(), model.parameters(), self.local_model):
             old_param.data = new_param.data.clone()
             local_param.data = new_param.data.clone()
         #self.local_weight_updated = copy.deepcopy(self.optimizer.param_groups[0]['params'])
 
     def get_parameters(self):
+        """this one used for model aggregation
+        """
         for param in self.model.parameters():
             param.detach()
         return self.model.parameters()
     
     def clone_model_paramenter(self, param, clone_param):
+        """this one used for copy current trained local model into a replica, used for further processing
+        """
         for param, clone_param in zip(param, clone_param):
             clone_param.data = param.data.clone()
         return clone_param
